@@ -1,0 +1,10 @@
+assets
+x64
+x86
+libpng16-16.dll
+SDL2.dll
+SDL2_image.dll
+zlib1.dll
+GameJam1.vcxproj
+GameJam1.vcxproj.filters
+GameJam1.vcxproj.user
