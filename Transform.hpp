@@ -31,8 +31,8 @@ public:
 	}
 
 	void update() override {
-		position.x += velocity.x * speed;
-		position.y += velocity.y * speed;
+		position.x += trunc(velocity.x);
+		position.y += trunc(velocity.y);
 	}
 
 	int getWidth() { return width; }
@@ -50,6 +50,4 @@ private:
 	int width = 32;
 	int height = 32;
 	int scale = 1;
-
-	int speed = 2;
 };

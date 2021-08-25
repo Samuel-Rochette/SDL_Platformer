@@ -70,12 +70,25 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
+	float preX = player.getComponent<Transform>().position.x;
+
 	manager.refresh();
 	manager.update();
 
 	for (Collider* cc : colliders)
 		Collision::AABB(player.getComponent<Collider>(), *cc);
 
+	if (player.getComponent<Transform>().position.x > 496 || player.getComponent<Transform>().position.x < 304) {
+		float playerTraveled = player.getComponent<Transform>().position.x - preX;
+
+		//cout << playerTraveled << endl;
+
+		player.getComponent<Transform>().position.x -= playerTraveled;
+
+		for (Entity* e : background) {
+			e->getComponent<Transform>().position.x -= playerTraveled;
+		}
+	}
 }
 
 void Game::render() {

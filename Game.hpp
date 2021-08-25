@@ -4,6 +4,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include <vector>
+#include <iostream>
 
 class Collider;
 
