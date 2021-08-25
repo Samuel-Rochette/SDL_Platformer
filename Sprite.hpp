@@ -40,6 +40,8 @@ public:
 		TextureManager::draw(texture, srcRect, destRect);
 	}
 
+	SDL_Rect& getDest() { return destRect; }
+
 private:
 	Transform* transform;
 	SDL_Texture* texture;

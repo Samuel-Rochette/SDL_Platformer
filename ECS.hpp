@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Game.hpp"
 #include <iostream>
 #include <vector>
 #include <memory>

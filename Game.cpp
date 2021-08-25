@@ -12,11 +12,13 @@ SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
 vector<Collider*> Game::colliders;
+Vector2D Game::mouse;
 
 Entity& player(manager.addEntity());
 
 vector<Entity*>& background(manager.getGroup(Game::Background));
 vector<Entity*>& actors(manager.getGroup(Game::Actors));
+vector<Entity*>& ui(manager.getGroup(Game::UI));
 
 Game::Game() {
 
@@ -49,13 +51,14 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	else
 		running = false;
 
-	player.addComponent<Transform>(64, 320);
+	player.addComponent<Transform>(12 * 32, 10 * 32);
 	player.addComponent<PlayerController>();
 	player.addComponent<Collider>("player");
 	player.addComponent<Sprite>("assets/player.png");
-	player.addGroup(Actors);
+	player.addGroup(Game::Actors);
 
-	sceneManager.loadMap("XML/test.xml", manager, player);
+	sceneManager.loadMenu(manager);
+	//sceneManager.loadMap("XML/test.xml", manager, player);
 }
 
 void Game::handleEvents() {
@@ -64,13 +67,18 @@ void Game::handleEvents() {
 	case SDL_QUIT:
 		running = false;
 		break;
+	case SDL_MOUSEMOTION:
+		Game::mouse.x = event.motion.x;
+		Game::mouse.y = event.motion.y;
+		break;
 	default:
 		break;
 	}
 }
 
 void Game::update() {
-	float preX = player.getComponent<Transform>().position.x;
+	preX = player.getComponent<Transform>().position.x;
+	preY = player.getComponent<Transform>().position.y;
 
 	manager.refresh();
 	manager.update();
@@ -89,6 +97,17 @@ void Game::update() {
 			e->getComponent<Transform>().position.x -= playerTraveled;
 		}
 	}
+	if (player.getComponent<Transform>().position.y > 416 || player.getComponent<Transform>().position.y < 224) {
+		float playerTraveled = player.getComponent<Transform>().position.y - preY;
+
+		//cout << playerTraveled << endl;
+
+		player.getComponent<Transform>().position.y -= playerTraveled;
+
+		for (Entity* e : background) {
+			e->getComponent<Transform>().position.y -= playerTraveled;
+		}
+	}
 }
 
 void Game::render() {
@@ -97,6 +116,8 @@ void Game::render() {
 	for (Entity* e : background)
 		e->draw();
 	for (Entity* e : actors)
+		e->draw();
+	for (Entity* e : ui)
 		e->draw();
 
 	SDL_RenderPresent(renderer);
@@ -107,4 +128,23 @@ void Game::clean() {
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 	cout << "Game Cleaned" << endl;
+}
+
+void Game::loadScene(int scene) {
+	SDL_Event e;
+	switch (scene) {
+	case 0:
+		e.type = SDL_QUIT;
+		SDL_PushEvent(&e);
+		break;
+	case 1:
+		sceneManager.loadMenu(manager);
+		break;
+	case 2:
+		//WARNING: This code is unstable, only allow the last entity in the vector to invoke this
+		for (Entity* e : ui)
+			e->destroy();
+		sceneManager.loadMap("XML/test.xml", manager, player);
+		break;
+	}
 }

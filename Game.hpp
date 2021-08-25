@@ -3,6 +3,7 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+#include "Vector2D.hpp"
 #include <vector>
 #include <iostream>
 
@@ -23,17 +24,24 @@ public:
 	void clean();
 
 	bool isRunning() { return running; }
+	//void setRunning(bool flag) { running = flag; };
 
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
 	static vector<Collider*> colliders;
+	static Vector2D mouse;
+
+	static void loadScene(int scene);
 
 	enum groupLabels : size_t {
 		Background,
-		Actors
+		Actors,
+		UI
 	};
 
 private:
+	float preX;
+	float preY;
 	int cnt = 0;
 	bool running;
 	SDL_Window* window;

@@ -13,7 +13,6 @@ using namespace rapidxml;
 
 class SceneManager {
 public:
-	static void loadMenu();
+	static void loadMenu(Manager& manager);
 	static void loadMap(const char* path, Manager& manager, Entity& player);
-	static void destroyAllEntities();
 };
