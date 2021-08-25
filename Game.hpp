@@ -3,7 +3,6 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
-#include <iostream>
 #include <vector>
 
 class Collider;
@@ -23,9 +22,6 @@ public:
 	void clean();
 
 	bool isRunning() { return running; }
-
-	void generateMapTile(int x, int y, const char* path);
-	void generateCollider(int x, int y, int w, int h);
 
 	static SDL_Renderer* renderer;
 	static SDL_Event event;

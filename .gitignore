@@ -8,3 +8,8 @@ zlib1.dll
 GameJam1.vcxproj
 GameJam1.vcxproj.filters
 GameJam1.vcxproj.user
+XML
+rapidxml.hpp
+rapidxml_iterators.hpp
+rapidxml_print.hpp
+rapidxml_utils.hpp

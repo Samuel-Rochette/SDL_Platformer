@@ -39,6 +39,11 @@ public:
 	int getHeight() { return height; }
 	int getScale() { return scale; }
 
+	void setPosition(float x, float y) {
+		position.x = x;
+		position.y = y;
+	}
+
 	static vector<Transform*> colliders;
 
 private:
