@@ -52,10 +52,11 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		running = false;
 
 	player.addComponent<Transform>(12 * 32, 10 * 32);
-	player.addComponent<Sprite>("assets/test.png", true);
-	player.getComponent<Sprite>().addAnimation("idle", 0, 4, 100);
-	player.getComponent<Sprite>().addAnimation("run", 1, 4, 100);
-	player.getComponent<Sprite>().addAnimation("jump", 2, 3, 200);
+	player.addComponent<Sprite>("assets/player.png", true);
+	player.getComponent<Sprite>().addAnimation("idle", 0, 4, 140);
+	player.getComponent<Sprite>().addAnimation("run", 1, 4, 80);
+	player.getComponent<Sprite>().addAnimation("jump", 2, 1, 200);
+	player.getComponent<Sprite>().addAnimation("wall", 3, 1, 200);
 	player.getComponent<Sprite>().playAnimation("jump");
 	player.addComponent<PlayerController>();
 	player.addComponent<Collider>("player");

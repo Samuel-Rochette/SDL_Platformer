@@ -38,6 +38,14 @@ public:
 
 		if (grounded)
 			sprite->playAnimation("idle");
+		else if (lwallstate) {
+			sprite->playAnimation("wall");
+			sprite->flip = SDL_FLIP_HORIZONTAL;
+		}
+		else if (rwallstate) {
+			sprite->playAnimation("wall");
+			sprite->flip = SDL_FLIP_NONE;
+		}
 		else
 			sprite->playAnimation("jump");
 
@@ -78,12 +86,10 @@ public:
 			if (eventCode == SDLK_SPACE && grounded)
 				transform->velocity.y = -16;
 			else if (eventCode == SDLK_SPACE && rwallstate) {
-				rwallstate = false;
 				transform->velocity.y = -12;
 				transform->velocity.x = -4;
 			}
 			else if (eventCode == SDLK_SPACE && lwallstate) {
-				lwallstate = false;
 				transform->velocity.y = -12;
 				transform->velocity.x = 4;
 			}
@@ -96,7 +102,7 @@ public:
 		}
 
 		//cout << "(" << transform->position.x << ", " << transform->position.y << ")" << endl;
-		cout << "velocity: (" << transform->velocity.x << ", " << transform->velocity.y << ")" << endl;
+		//cout << "velocity: (" << transform->velocity.x << ", " << transform->velocity.y << ")" << endl;
 
 		grounded = false;
 		lwallstate = false;

@@ -7,15 +7,15 @@ void SceneManager::loadMenu(Manager& manager) {
 	menuBackground.addGroup(Game::UI);
 
 	Entity& quitUI(manager.addEntity());
-	quitUI.addComponent<Transform>(15 * 32, 10 * 32, 112, 64, 1);
-	quitUI.addComponent<Sprite>("assets/u-quit.png");
-	quitUI.addComponent<SelectUI>("assets/u-quit.png", "assets/s-quit.png", 0);
+	quitUI.addComponent<Transform>(17 * 32, 11 * 32, 112, 64, 1);
+	quitUI.addComponent<Sprite>("assets/quit.png");
+	quitUI.addComponent<SelectUI>("assets/quit.png", "assets/quitselect.png", 0);
 	quitUI.addGroup(Game::UI);
 
 	Entity& startUI(manager.addEntity());
-	startUI.addComponent<Transform>(15 * 32, 8 * 32, 112, 64, 1);
-	startUI.addComponent<Sprite>("assets/u-start.png");
-	startUI.addComponent<SelectUI>("assets/u-start.png", "assets/s-start.png", 2);
+	startUI.addComponent<Transform>(17 * 32, 8 * 32, 112, 64, 1);
+	startUI.addComponent<Sprite>("assets/start.png");
+	startUI.addComponent<SelectUI>("assets/start.png", "assets/startselect.png", 2);
 	startUI.addGroup(Game::UI);
 }
 
@@ -54,10 +54,20 @@ void SceneManager::loadMap(const char* path, Manager& manager, Entity& player) {
 		int tileCode;
 		while (mapTiles >> tileCode) {
 			Entity& tile(manager.addEntity());
-			tile.addComponent<Transform>(col * 32, (row - maxRows / 2) * 32);
 			switch (tileCode) {
 			case 1:
-				tile.addComponent<Sprite>("assets/floor.png");
+				tile.addComponent<Transform>(col * 32, (row - maxRows / 2) * 32);
+				tile.addComponent<Sprite>("assets/tiledirt.png");
+				tile.addGroup(Game::Background);
+				break;
+			case 2:
+				tile.addComponent<Transform>(col * 32, (row - maxRows / 2) * 32);
+				tile.addComponent<Sprite>("assets/tilegrass.png");
+				tile.addGroup(Game::Background);
+				break;
+			case 3:
+				tile.addComponent<Transform>(col * 32, (row - maxRows / 2) * 32);
+				tile.addComponent<Sprite>("assets/tilerock.png");
 				tile.addGroup(Game::Background);
 				break;
 			default:
