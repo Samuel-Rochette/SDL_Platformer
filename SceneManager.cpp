@@ -6,17 +6,17 @@ void SceneManager::loadMenu(Manager& manager) {
 	menuBackground.addComponent<Sprite>("assets/menu-background.png");
 	menuBackground.addGroup(Game::UI);
 
-	Entity& quitUI(manager.addEntity());
-	quitUI.addComponent<Transform>(17 * 32, 11 * 32, 112, 64, 1);
-	quitUI.addComponent<Sprite>("assets/quit.png");
-	quitUI.addComponent<SelectUI>("assets/quit.png", "assets/quitselect.png", 0);
-	quitUI.addGroup(Game::UI);
-
 	Entity& startUI(manager.addEntity());
 	startUI.addComponent<Transform>(17 * 32, 8 * 32, 112, 64, 1);
 	startUI.addComponent<Sprite>("assets/start.png");
 	startUI.addComponent<SelectUI>("assets/start.png", "assets/startselect.png", 2);
 	startUI.addGroup(Game::UI);
+
+	Entity& quitUI(manager.addEntity());
+	quitUI.addComponent<Transform>(17 * 32, 11 * 32, 112, 64, 1);
+	quitUI.addComponent<Sprite>("assets/quit.png");
+	quitUI.addComponent<SelectUI>("assets/quit.png", "assets/quitselect.png", 0);
+	quitUI.addGroup(Game::UI);
 }
 
 void SceneManager::loadMap(const char* path, Manager& manager, Entity& player) {
@@ -31,6 +31,7 @@ void SceneManager::loadMap(const char* path, Manager& manager, Entity& player) {
 	xml_node<>* root_node = doc.first_node("Script");
 	xml_node<>* map_node = root_node->first_node("Map");
 	xml_node<>* colliders_node = root_node->first_node("Colliders");
+	xml_node<>* hazard_node = root_node->first_node("Hazards");
 
 	player.getComponent<Transform>().setPosition(12 * 32, 10 * 32);
 
@@ -70,6 +71,11 @@ void SceneManager::loadMap(const char* path, Manager& manager, Entity& player) {
 				tile.addComponent<Sprite>("assets/tilerock.png");
 				tile.addGroup(Game::Background);
 				break;
+			case 4:
+				tile.addComponent<Transform>(col * 32, (row - maxRows / 2) * 32);
+				tile.addComponent<Sprite>("assets/tilerockr.png");
+				tile.addGroup(Game::Background);
+				break;
 			default:
 				break;
 			}
@@ -78,6 +84,23 @@ void SceneManager::loadMap(const char* path, Manager& manager, Entity& player) {
 
 		col = 0;
 		row++;
+	}
+
+	for (xml_node<>* spike_node = hazard_node->first_node("spike");
+		spike_node; spike_node = spike_node->next_sibling()) {
+
+		int n = atoi(spike_node->first_node("n")->value());
+		
+		for (int i = 0; i < n; i++) {
+			int x = (atoi(spike_node->first_node("x")->value()) + i) * 32;
+			int y = (atoi(spike_node->first_node("y")->value()) - maxRows / 2) * 32 + 20;
+
+			Entity& spike(manager.addEntity());
+			spike.addComponent<Transform>(x, y, 32, 12, 1);
+			spike.addComponent<Sprite>("assets/spikehorizontalu.png");
+			spike.addComponent<Collider>("hazard");
+			spike.addGroup(Game::Background);
+		}
 	}
 
 	for (xml_node<>* collider_node = colliders_node->first_node("collider");

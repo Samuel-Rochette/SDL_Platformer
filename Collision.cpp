@@ -49,6 +49,13 @@ bool Collision::AABB(const Collider& colA, const Collider& colB) {
 			}
 
 		}
+		if (colA.entity->getComponent<PlayerController>().alive && colA.tag == "player" && colB.tag == "hazard") {
+			//BROKEN
+			//Game::loadScene(1);
+			cout << "You are dead, could you kindly turn the game off pls?" << endl;
+			colA.entity->getComponent<PlayerController>().alive = false;
+			colA.entity->getComponent<Sprite>().setTex("");
+		}
 	}
 
 	return false;

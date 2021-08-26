@@ -34,7 +34,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		flags = SDL_WINDOW_FULLSCREEN;
 	
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
-		cout << "Subsystems Initialized!..." << endl;
+		cout << "Subsystems Initialized!" << endl;
 
 		window = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
 		if (window)
@@ -74,6 +74,11 @@ void Game::handleEvents() {
 	case SDL_MOUSEMOTION:
 		Game::mouse.x = event.motion.x;
 		Game::mouse.y = event.motion.y;
+		break;
+	case SDL_USEREVENT:
+		for (Entity* e : ui)
+			e->destroy();
+		sceneManager.loadMap("XML/test.xml", manager, player);
 		break;
 	default:
 		break;
@@ -136,6 +141,7 @@ void Game::clean() {
 
 void Game::loadScene(int scene) {
 	SDL_Event e;
+	Uint32 eventType;
 	switch (scene) {
 	case 0:
 		e.type = SDL_QUIT;
@@ -146,9 +152,12 @@ void Game::loadScene(int scene) {
 		break;
 	case 2:
 		//WARNING: This code is unstable, only allow the last entity in the vector to invoke this
-		for (Entity* e : ui)
-			e->destroy();
-		sceneManager.loadMap("XML/test.xml", manager, player);
+		//for (Entity* e : ui)
+		//	e->destroy();
+		//sceneManager.loadMap("XML/test.xml", manager, player);
+		eventType = 32768;
+		e.type = eventType;
+		SDL_PushEvent(&e);
 		break;
 	}
 }
