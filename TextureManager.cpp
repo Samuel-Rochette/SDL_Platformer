@@ -8,6 +8,6 @@ SDL_Texture* TextureManager::loadTexture(const char* texture) {
 	return tex;
 }
 
-void TextureManager::draw(SDL_Texture* tex, SDL_Rect srcRect, SDL_Rect destRect) {
-	SDL_RenderCopy(Game::renderer, tex, &srcRect, &destRect);
+void TextureManager::draw(SDL_Texture* tex, SDL_Rect srcRect, SDL_Rect destRect, SDL_RendererFlip flip) {
+	SDL_RenderCopyEx(Game::renderer, tex, &srcRect, &destRect, NULL, NULL, flip);
 }

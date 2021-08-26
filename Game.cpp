@@ -52,13 +52,16 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		running = false;
 
 	player.addComponent<Transform>(12 * 32, 10 * 32);
+	player.addComponent<Sprite>("assets/test.png", true);
+	player.getComponent<Sprite>().addAnimation("idle", 0, 4, 100);
+	player.getComponent<Sprite>().addAnimation("run", 1, 4, 100);
+	player.getComponent<Sprite>().addAnimation("jump", 2, 3, 200);
+	player.getComponent<Sprite>().playAnimation("jump");
 	player.addComponent<PlayerController>();
 	player.addComponent<Collider>("player");
-	player.addComponent<Sprite>("assets/player.png");
 	player.addGroup(Game::Actors);
 
 	sceneManager.loadMenu(manager);
-	//sceneManager.loadMap("XML/test.xml", manager, player);
 }
 
 void Game::handleEvents() {

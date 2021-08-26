@@ -31,10 +31,13 @@ void SceneManager::loadMap(const char* path, Manager& manager, Entity& player) {
 	xml_node<>* root_node = doc.first_node("Script");
 	xml_node<>* map_node = root_node->first_node("Map");
 	xml_node<>* colliders_node = root_node->first_node("Colliders");
-	//xml_node<>* player_node = root_node->first_node("Player");
 
 	player.getComponent<Transform>().setPosition(12 * 32, 10 * 32);
-	player.addGroup(Game::Actors);
+
+	Entity& background(manager.addEntity());
+	background.addComponent<Transform>(256, -640, 1800, 1280, 1);
+	background.addComponent<Sprite>("assets/bg2.png");
+	background.addGroup(Game::Background);
 
 	int maxRows = 0;
 	for (xml_node<>* row_node = map_node->first_node("row");
@@ -58,8 +61,6 @@ void SceneManager::loadMap(const char* path, Manager& manager, Entity& player) {
 				tile.addGroup(Game::Background);
 				break;
 			default:
-				tile.addComponent<Sprite>("assets/background.png");
-				tile.addGroup(Game::Background);
 				break;
 			}
 			col++;
@@ -73,7 +74,7 @@ void SceneManager::loadMap(const char* path, Manager& manager, Entity& player) {
 		collider_node; collider_node = collider_node->next_sibling()) {
 
 		int x = atoi(collider_node->first_node("x")->value()) * 32;
-		int y = (atoi(collider_node->first_node("y")->value()) - 20) * 32;
+		int y = (atoi(collider_node->first_node("y")->value()) - maxRows / 2) * 32;
 		int width = atoi(collider_node->first_node("w")->value()) * 32;
 		int height = atoi(collider_node->first_node("h")->value()) * 32;
 

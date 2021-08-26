@@ -7,6 +7,7 @@
 class PlayerController : public Component {
 public:
 	Transform* transform;
+	Sprite* sprite;
 	bool grounded = true;
 	bool lwallstate = false;
 	bool rwallstate = false;
@@ -16,6 +17,7 @@ public:
 
 	void init() override {
 		transform = &entity->getComponent<Transform>();
+		sprite = &entity->getComponent<Sprite>();
 		transform->velocity.y = fallSpeed;
 	}
 
@@ -34,14 +36,23 @@ public:
 		if (transform->velocity.y > fallSpeed)
 			transform->velocity.y = fallSpeed;
 
+		if (grounded)
+			sprite->playAnimation("idle");
+		else
+			sprite->playAnimation("jump");
+
 		const Uint8 *state = SDL_GetKeyboardState(NULL);
 
-		if (state[SDL_SCANCODE_A] && grounded && transform->velocity.x > moveSpeed * -1) {
+		if (state[SDL_SCANCODE_A] && grounded) {
+			sprite->playAnimation("run");
+			sprite->flip = SDL_FLIP_NONE;
 			transform->velocity.x -= 1;
 			if (transform->velocity.x < moveSpeed * -1)
 				transform->velocity.x = moveSpeed * -1;
 		}
-		else if (state[SDL_SCANCODE_D] && grounded && transform->velocity.x < moveSpeed) {
+		else if (state[SDL_SCANCODE_D] && grounded) {
+			sprite->playAnimation("run");
+			sprite->flip = SDL_FLIP_HORIZONTAL;
 			transform->velocity.x += 1;
 			if (transform->velocity.x > moveSpeed)
 				transform->velocity.x = moveSpeed;
@@ -85,7 +96,7 @@ public:
 		}
 
 		//cout << "(" << transform->position.x << ", " << transform->position.y << ")" << endl;
-		//cout << "velocity: (" << transform->velocity.x << ", " << transform->velocity.y << ")" << endl;
+		cout << "velocity: (" << transform->velocity.x << ", " << transform->velocity.y << ")" << endl;
 
 		grounded = false;
 		lwallstate = false;
